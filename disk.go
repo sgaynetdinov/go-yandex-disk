@@ -5,3 +5,8 @@ type Disk struct {
 	TotalSpace uint64 `json:"total_space"`
 	UsedSpace  uint64 `json:"used_space"`
 }
+
+func (client *Client) DiskInfo() (disk *Disk) {
+	client.get(&disk)
+	return
+}
