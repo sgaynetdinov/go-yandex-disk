@@ -25,8 +25,9 @@ func NewClient(token string) *Client {
 	}
 }
 
-func (client *Client) get(v interface{}) {
-	request, err := http.NewRequest("GET", client.api_url, nil)
+func (client *Client) do(method string, path string) (*http.Response, *[]byte) {
+	request, err := http.NewRequest(method, path, nil)
+	request.Header = *client.header
 	if err != nil {
 		panic(err)
 	}
@@ -39,5 +40,10 @@ func (client *Client) get(v interface{}) {
 	text, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 
-	json.Unmarshal(text, v)
+	return response, &text
+}
+
+func (client *Client) get(v interface{}) {
+	_, text := client.do("GET", client.api_url)
+	json.Unmarshal(*text, v)
 }
