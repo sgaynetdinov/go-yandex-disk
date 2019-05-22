@@ -25,7 +25,7 @@ func NewClient(token string) *Client {
 	}
 }
 
-func (client *Client) do(method string, path string) (*http.Response, *[]byte) {
+func (client *Client) do(method string, path string) (*http.Response, *[]byte, error) {
 	request, err := http.NewRequest(method, path, nil)
 	request.Header = *client.header
 	if err != nil {
@@ -40,10 +40,22 @@ func (client *Client) do(method string, path string) (*http.Response, *[]byte) {
 	text, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 
-	return response, &text
+	if response.StatusCode != http.StatusOK {
+		var err yaError
+		json.Unmarshal(text, &err)
+		return nil, nil, &err
+	}
+
+	return response, &text, nil
 }
 
-func (client *Client) get(v interface{}) {
-	_, text := client.do("GET", client.api_url)
+func (client *Client) get(v interface{}) error {
+	_, text, err := client.do("GET", client.api_url)
+
+	if err != nil {
+		return err
+	}
+
 	json.Unmarshal(*text, v)
+	return nil
 }

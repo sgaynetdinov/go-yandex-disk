@@ -35,7 +35,11 @@ func TestDo(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	response, _ := client.do("GET", ts.URL)
+	response, _, err := client.do("GET", ts.URL)
+
+	if err != nil {
+		t.Error("Error is not nil")
+	}
 
 	if response.Request.Header.Get("Authorization") != "OAuth YOUR_TOKEN" {
 		t.Error("Invalid oauth token")
@@ -47,5 +51,27 @@ func TestDo(t *testing.T) {
 
 	if response.Request.Header.Get("Content-Type") != "application/json" {
 		t.Error("Invalid Content-Type")
+	}
+}
+
+func TestDoIfStatusCodeNot200(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{
+  			"description": "resource already exists",
+  			"error": "PlatformResourceAlreadyExists"
+		}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	_, _, err := client.do("GET", ts.URL)
+
+	if err == nil {
+		t.Error("Error is nil")
+	}
+
+	if err.Error() != "resource already exists - PlatformResourceAlreadyExists" {
+		t.Error("Invalid error message")
 	}
 }
