@@ -47,7 +47,11 @@ func TestDiskInfo(t *testing.T) {
 	client := NewClient("YOUR_TOKEN")
 	client.api_url = ts.URL
 
-	disk := client.DiskInfo()
+	disk, err := client.DiskInfo()
+
+	if err != nil {
+		t.Error("Error is not nil")
+	}
 
 	if disk.TrashSize != 4631577437 {
 		t.Error("Disk.TrashSize")
@@ -60,4 +64,29 @@ func TestDiskInfo(t *testing.T) {
 	if disk.UsedSpace != 26157681270 {
 		t.Error("Disk.UsedSpace")
 	}
+}
+
+func TestDiskInfoIfStatusNot200(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{
+  			"description": "resource already exists",
+  			"error": "PlatformResourceAlreadyExists"
+		}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	client.api_url = ts.URL
+
+	_, err := client.DiskInfo()
+
+	if err == nil {
+		t.Error("Error is nil")
+	}
+
+	if err.Error() != "resource already exists - PlatformResourceAlreadyExists" {
+		t.Error("Invalid error message")
+	}
+
 }

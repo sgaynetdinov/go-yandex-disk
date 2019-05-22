@@ -6,7 +6,11 @@ type Disk struct {
 	UsedSpace  uint64 `json:"used_space"`
 }
 
-func (client *Client) DiskInfo() (disk *Disk) {
-	client.get(&disk)
+func (client *Client) DiskInfo() (disk *Disk, err error) {
+	err = client.get(&disk)
+	if err != nil {
+		return nil, err
+	}
+
 	return
 }
