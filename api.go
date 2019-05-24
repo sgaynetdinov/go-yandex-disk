@@ -50,7 +50,7 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 }
 
 func (client *Client) get(v interface{}) error {
-	text, err := client.do("GET", client.api_url)
+	text, err := client.do(http.MethodGet, client.api_url)
 
 	if err != nil {
 		return err

@@ -37,7 +37,7 @@ func TestDo(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	_, err := client.do("GET", ts.URL)
+	_, err := client.do(http.MethodGet, ts.URL)
 
 	if err != nil {
 		t.Error("Error is not nil")
@@ -67,7 +67,7 @@ func TestDoIfStatusCodeNot200(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	_, err := client.do("GET", ts.URL)
+	_, err := client.do(http.MethodGet, ts.URL)
 
 	if err == nil {
 		t.Error("Error is nil")
