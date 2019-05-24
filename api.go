@@ -25,7 +25,7 @@ func NewClient(token string) *Client {
 	}
 }
 
-func (client *Client) do(method string, path string) (*http.Response, *[]byte, error) {
+func (client *Client) do(method string, path string) (*[]byte, error) {
 	request, err := http.NewRequest(method, path, nil)
 	request.Header = *client.header
 	if err != nil {
@@ -43,14 +43,14 @@ func (client *Client) do(method string, path string) (*http.Response, *[]byte, e
 	if response.StatusCode != http.StatusOK {
 		var err yaError
 		json.Unmarshal(text, &err)
-		return nil, nil, &err
+		return nil, &err
 	}
 
-	return response, &text, nil
+	return &text, nil
 }
 
 func (client *Client) get(v interface{}) error {
-	_, text, err := client.do("GET", client.api_url)
+	text, err := client.do("GET", client.api_url)
 
 	if err != nil {
 		return err
