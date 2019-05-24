@@ -2,7 +2,6 @@ package yandexdisk
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -40,7 +39,7 @@ func TestDisk(t *testing.T) {
 func TestDiskInfo(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprint(w, string(disk_json))
+		w.Write(disk_json)
 	}))
 	defer ts.Close()
 
