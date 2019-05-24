@@ -49,6 +49,7 @@ func TestGetUrlUploadWithError(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
+	client.api_url = ts.URL
 	link, err := client.getUrlUpload("/")
 
 	if err == nil {
