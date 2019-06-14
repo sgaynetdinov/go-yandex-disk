@@ -1,9 +1,9 @@
 workflow "Golang Test" {
-  resolves = ["Golang Action"]
+  resolves = ["Test"]
   on = "push"
 }
 
-action "test" {
+action "Test" {
   uses = "cedrickring/golang-action@1.3.0"
   
   args = "go build && go test"
