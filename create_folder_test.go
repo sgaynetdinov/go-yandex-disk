@@ -22,22 +22,10 @@ func TestCreateFolder(t *testing.T) {
 
 	client := NewClient("YOUR_TOKEN")
 	client.api_url = ts.URL
-	link, err := client.CreateFolder("test")
+	err := client.CreateFolder("test")
 
 	if err != nil {
 		t.Error("Error is not nil")
-	}
-
-	if link.Href != "https://cloud-api.yandex.net/v1/disk/resources?path" {
-		t.Error("Invalid Href")
-	}
-
-	if link.Method != "GET" {
-		t.Error("Invalid Method")
-	}
-
-	if link.Templated != false {
-		t.Error("Invalid Templated")
 	}
 
 	if req.Method != http.MethodPut {
