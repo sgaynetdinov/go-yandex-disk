@@ -2,11 +2,15 @@ package yandexdisk
 
 import (
 	"net/http"
+	"net/url"
 	"os"
 )
 
 func (client *Client) getUrlUpload(path string) (link *Link, err error) {
-	err = client.get(&link)
+	params := url.Values{}
+	params.Add("path", path)
+
+	err = client.get(&link, &params)
 	return
 }
 

@@ -7,6 +7,8 @@ import (
 )
 
 func TestGetUrlUpload(t *testing.T) {
+	var req *http.Request
+
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
@@ -14,12 +16,13 @@ func TestGetUrlUpload(t *testing.T) {
   			"method": "GET",
   			"templated": false
 		}`))
+		req = r
 	}))
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
 	client.api_url = ts.URL
-	link, err := client.getUrlUpload("/")
+	link, err := client.getUrlUpload("test.txt")
 
 	if err != nil {
 		t.Error("Error is not nil")
@@ -35,6 +38,10 @@ func TestGetUrlUpload(t *testing.T) {
 
 	if link.Templated != false {
 		t.Error("Invalid Templated")
+	}
+
+	if req.URL.RawQuery != "path=test.txt" {
+		t.Error("Invalid", req.URL.RawQuery)
 	}
 }
 
