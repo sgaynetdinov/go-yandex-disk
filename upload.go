@@ -10,7 +10,7 @@ func (client *Client) getUrlUpload(path string) (link *Link, err error) {
 	params := url.Values{}
 	params.Add("path", path)
 
-	err = client.get(&link, &params)
+	err = client.get(&link, "/v1/disk/resources/upload", &params)
 	return
 }
 

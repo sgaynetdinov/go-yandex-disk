@@ -43,6 +43,10 @@ func TestGetUrlUpload(t *testing.T) {
 	if req.URL.RawQuery != "path=test.txt" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
+
+	if req.URL.Path != "/v1/disk/resources/upload" {
+		t.Error("Invalid url path", req.URL.Path)
+	}
 }
 
 func TestGetUrlUploadWithError(t *testing.T) {

@@ -20,7 +20,7 @@ func NewClient(token string) *Client {
 	header.Add("Content-Type", "application/json")
 
 	return &Client{
-		api_url:     "https://cloud-api.yandex.net/v1/disk/",
+		api_url:     "https://cloud-api.yandex.net:443",
 		header:      &header,
 		http_client: new(http.Client),
 	}
@@ -50,12 +50,20 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 	return &text, nil
 }
 
-func (client *Client) get(v interface{}, params *url.Values) error {
-	if params != nil {
-		client.api_url += "?" + params.Encode()
+func (client *Client) get(v interface{}, path string, params *url.Values) error {
+	var url string
+
+	url = client.api_url
+
+	if path != "" {
+		url += path
 	}
 
-	text, err := client.do(http.MethodGet, client.api_url)
+	if params != nil {
+		url += "?" + params.Encode()
+	}
+
+	text, err := client.do(http.MethodGet, url)
 
 	if err != nil {
 		return err
