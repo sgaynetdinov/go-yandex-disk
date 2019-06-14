@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type Client struct {
@@ -23,6 +24,14 @@ func NewClient(token string) *Client {
 		api_url:     "https://cloud-api.yandex.net/v1/disk/",
 		header:      &header,
 		http_client: new(http.Client),
+	}
+}
+
+func (client *Client) GetApiUrl() string {
+	if !strings.HasSuffix(client.api_url, "/") {
+		return client.api_url + "/"
+	} else {
+		return client.api_url
 	}
 }
 

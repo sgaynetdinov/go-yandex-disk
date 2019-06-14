@@ -26,6 +26,20 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
+func TestNewClientGetApiUrl(t *testing.T) {
+	client := NewClient("YOUR_TOKEN")
+
+	client.api_url = "https://cloud-api.yandex.net:443"
+	if client.GetApiUrl() != "https://cloud-api.yandex.net:443/" {
+		t.Error("Invalid api url", client.GetApiUrl())
+	}
+
+	client.api_url = "https://cloud-api.yandex.net:443/"
+	if client.GetApiUrl() != "https://cloud-api.yandex.net:443/" {
+		t.Error("Invalid api url", client.GetApiUrl())
+	}
+}
+
 func TestDo(t *testing.T) {
 	var req *http.Request
 
