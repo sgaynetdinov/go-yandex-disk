@@ -3,6 +3,7 @@ package yandexdisk
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
@@ -72,16 +73,6 @@ func TestGetUrlUploadWithError(t *testing.T) {
 	}
 }
 
-func TestUploadFileIfNotFound(t *testing.T) {
-	client := NewClient("YOUR_TOKEN")
-
-	err := client.uploadFile("url", "testdata/upload.txt")
-
-	if err == nil {
-		t.Error("Error not nil")
-	}
-}
-
 func TestUploadRequest(t *testing.T) {
 	var req *http.Request
 
@@ -92,7 +83,8 @@ func TestUploadRequest(t *testing.T) {
 	defer ts.Close()
 	client := NewClient("YOUR_TOKEN")
 
-	err := client.uploadFile(ts.URL, "testdata/upload_file.txt")
+	file, _ := os.Open("testdata/upload_file.txt")
+	err := client.uploadFile(ts.URL, file)
 
 	if err != nil {
 		t.Error("Invalid not nil")
