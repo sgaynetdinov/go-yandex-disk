@@ -9,7 +9,7 @@ import (
 func TestNewClient(t *testing.T) {
 	client := NewClient("YOUR_TOKEN")
 
-	if client.api_url != "https://cloud-api.yandex.net/v1/disk/" {
+	if client.api_url != "https://cloud-api.yandex.net:443" {
 		t.Error("Invalid api url")
 	}
 
@@ -23,20 +23,6 @@ func TestNewClient(t *testing.T) {
 
 	if client.header.Get("Content-Type") != "application/json" {
 		t.Error("Invalid Content-Type")
-	}
-}
-
-func TestNewClientGetApiUrl(t *testing.T) {
-	client := NewClient("YOUR_TOKEN")
-
-	client.api_url = "https://cloud-api.yandex.net:443"
-	if client.GetApiUrl() != "https://cloud-api.yandex.net:443/" {
-		t.Error("Invalid api url", client.GetApiUrl())
-	}
-
-	client.api_url = "https://cloud-api.yandex.net:443/"
-	if client.GetApiUrl() != "https://cloud-api.yandex.net:443/" {
-		t.Error("Invalid api url", client.GetApiUrl())
 	}
 }
 

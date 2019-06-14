@@ -7,7 +7,7 @@ type Disk struct {
 }
 
 func (client *Client) DiskInfo() (disk *Disk, err error) {
-	err = client.get(&disk, nil)
+	err = client.get(&disk, "", nil)
 	if err != nil {
 		return nil, err
 	}
