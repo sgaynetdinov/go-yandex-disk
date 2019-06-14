@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 type Client struct {
@@ -49,7 +50,11 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 	return &text, nil
 }
 
-func (client *Client) get(v interface{}) error {
+func (client *Client) get(v interface{}, params *url.Values) error {
+	if params != nil {
+		client.api_url += "?" + params.Encode()
+	}
+
 	text, err := client.do(http.MethodGet, client.api_url)
 
 	if err != nil {
