@@ -72,3 +72,24 @@ func (client *Client) get(v interface{}, path string, params *url.Values) error 
 	json.Unmarshal(*text, v)
 	return nil
 }
+
+func (client *Client) put(v interface{}, path string, params *url.Values) error {
+	url := client.api_url
+
+	if path != "" {
+		url += path
+	}
+
+	if params != nil {
+		url += "?" + params.Encode()
+	}
+
+	text, err := client.do(http.MethodPut, url)
+
+	if err != nil {
+		return err
+	}
+
+	json.Unmarshal(*text, v)
+	return nil
+}
