@@ -5,7 +5,7 @@ https://yandex.ru/dev/disk/api/concepts/about-docpage/
 
 ## Install
 
-go get -u github.com/sgaynetdinov/go-yandex-disk
+`go get -u github.com/sgaynetdinov/go-yandex-disk`
 
 
 ## Step 0
