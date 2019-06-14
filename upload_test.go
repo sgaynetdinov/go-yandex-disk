@@ -60,3 +60,34 @@ func TestGetUrlUploadWithError(t *testing.T) {
 		t.Error("Link not nil")
 	}
 }
+
+func TestUploadFileIfNotFound(t *testing.T) {
+	client := NewClient("YOUR_TOKEN")
+
+	err := client.uploadFile("url", "testdata/upload.txt")
+
+	if err == nil {
+		t.Error("Error not nil")
+	}
+}
+
+func TestUploadRequest(t *testing.T) {
+	var req *http.Request
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusCreated)
+		req = r
+	}))
+	defer ts.Close()
+	client := NewClient("YOUR_TOKEN")
+
+	err := client.uploadFile(ts.URL, "testdata/upload_file.txt")
+
+	if err != nil {
+		t.Error("Invalid not nil")
+	}
+
+	if req.Method != http.MethodPut {
+		t.Error("Method not PUT")
+	}
+}
