@@ -22,7 +22,7 @@ func TestCreateFolder(t *testing.T) {
 
 	client := NewClient("YOUR_TOKEN")
 	client.api_url = ts.URL
-	err := client.CreateFolder("test")
+	err := client.CreateFolder("/Music/2pac")
 
 	if err != nil {
 		t.Error("Error is not nil")
@@ -32,11 +32,29 @@ func TestCreateFolder(t *testing.T) {
 		t.Error("Invalid method")
 	}
 
-	if req.URL.RawQuery != "path=test" {
+	if req.URL.RawQuery != "path=%2FMusic%2F2pac" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 
 	if req.URL.Path != "/v1/disk/resources" {
 		t.Error("Invalid url path", req.URL.Path)
+	}
+}
+
+func TestCreateFolderAddStartSlash(t *testing.T) {
+	var req *http.Request
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		req = r
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	client.api_url = ts.URL
+	client.CreateFolder("Music/2pac")
+
+	if req.URL.RawQuery != "path=%2FMusic%2F2pac" {
+		t.Error("Invalid", req.URL.RawQuery)
 	}
 }
