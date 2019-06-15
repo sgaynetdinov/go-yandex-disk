@@ -23,7 +23,7 @@ func TestGetUrlUpload(t *testing.T) {
 
 	client := NewClient("YOUR_TOKEN")
 	client.api_url = ts.URL
-	link, err := client.getUrlUpload("test.txt")
+	link, err := client.getUrlUpload("test.txt", false)
 
 	if err != nil {
 		t.Error("Error is not nil")
@@ -41,12 +41,34 @@ func TestGetUrlUpload(t *testing.T) {
 		t.Error("Invalid Templated")
 	}
 
-	if req.URL.RawQuery != "path=test.txt" {
+	if req.URL.RawQuery != "overwrite=false&path=test.txt" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 
 	if req.URL.Path != "/v1/disk/resources/upload" {
 		t.Error("Invalid url path", req.URL.Path)
+	}
+}
+
+func TestGetUrlUploadOverwrite(t *testing.T) {
+	var req *http.Request
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		req = r
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	client.api_url = ts.URL
+	_, err := client.getUrlUpload("test.txt", true)
+
+	if err != nil {
+		t.Error("Error is not nil")
+	}
+
+	if req.URL.RawQuery != "overwrite=true&path=test.txt" {
+		t.Error("Invalid", req.URL.RawQuery)
 	}
 }
 
@@ -62,7 +84,7 @@ func TestGetUrlUploadWithError(t *testing.T) {
 
 	client := NewClient("YOUR_TOKEN")
 	client.api_url = ts.URL
-	link, err := client.getUrlUpload("/")
+	link, err := client.getUrlUpload("/", false)
 
 	if err == nil {
 		t.Error("Error is nil")
