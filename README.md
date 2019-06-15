@@ -17,4 +17,5 @@ func main() {
 
 ## Documentation
 
-- API Yandex.Disk - https://yandex.ru/dev/disk/api/concepts/about-docpage/
+- GoDoc: https://godoc.org/github.com/sgaynetdinov/go-yandex-disk
+- API Yandex.Disk: https://yandex.ru/dev/disk/api/concepts/about-docpage/
