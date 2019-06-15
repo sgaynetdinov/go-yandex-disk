@@ -41,7 +41,8 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 	text, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 
-	if response.StatusCode != http.StatusOK {
+	statusCode := response.StatusCode
+	if (statusCode != http.StatusOK) && (statusCode != http.StatusCreated) {
 		var err yaError
 		json.Unmarshal(text, &err)
 		return nil, &err
