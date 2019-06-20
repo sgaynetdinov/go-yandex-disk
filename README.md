@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/sgaynetdinov/go-yandex-disk?status.svg)](https://godoc.org/github.com/sgaynetdinov/go-yandex-disk)
+
 ## Install
 
 `go get -u github.com/sgaynetdinov/go-yandex-disk`
@@ -16,6 +18,4 @@ func main() {
 ```
 
 ## Documentation
-
-- GoDoc: https://godoc.org/github.com/sgaynetdinov/go-yandex-disk
 - API Yandex.Disk: https://yandex.ru/dev/disk/api/concepts/about-docpage/
