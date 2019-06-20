@@ -73,3 +73,70 @@ func TestCreateFolderError(t *testing.T) {
 		t.Error()
 	}
 }
+
+func TestIsExistsFolder_1(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{
+	        "message": "Не удалось найти запрошенный ресурс.",
+			"description": "Resource not found.",
+		    "error": "DiskNotFoundError"
+		}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	client.api_url = ts.URL
+	isExists, err := client.IsExistsFolder("Music/2pac")
+
+	if err != nil {
+		t.Error()
+	}
+
+	if isExists != false {
+		t.Error()
+	}
+}
+
+func TestIsExistsFolder_2(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	client.api_url = ts.URL
+	isExists, err := client.IsExistsFolder("Music/2pac")
+
+	if err != nil {
+		t.Error()
+	}
+
+	if isExists != true {
+		t.Error()
+	}
+}
+
+func TestIsExistsFolder_3(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{
+	        "message": "",
+			"description": "",
+		    "error": "Disk"
+		}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	client.api_url = ts.URL
+	isExists, err := client.IsExistsFolder("Music/2pac")
+
+	if err == nil {
+		t.Error()
+	}
+
+	if isExists != false {
+		t.Error()
+	}
+}
