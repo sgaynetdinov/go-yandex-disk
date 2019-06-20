@@ -12,7 +12,7 @@ var link_json = []byte(`{
 }`)
 
 func TestLink(t *testing.T) {
-	var link Link
+	var link link
 
 	json.Unmarshal(link_json, &link)
 

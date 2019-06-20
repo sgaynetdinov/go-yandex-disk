@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func (client *Client) getUrlUpload(path string, overwrite bool) (link *Link, err error) {
+func (client *Client) getUrlUpload(path string, overwrite bool) (link *link, err error) {
 	params := url.Values{}
 	params.Add("path", path)
 	if overwrite {

@@ -1,6 +1,6 @@
 package yandexdisk
 
-type Link struct {
+type link struct {
 	Href      string
 	Method    string
 	Templated bool
