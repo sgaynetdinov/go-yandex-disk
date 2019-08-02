@@ -1,6 +1,7 @@
 package yandexdisk
 
 import (
+	"bufio"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -106,7 +107,7 @@ func TestUploadRequest(t *testing.T) {
 	client := NewClient("YOUR_TOKEN")
 
 	file, _ := os.Open("testdata/upload_file.txt")
-	err := client.uploadFile(ts.URL, file)
+	err := client.uploadFile(ts.URL, bufio.NewReader(file))
 
 	if err != nil {
 		t.Error("Invalid not nil")
