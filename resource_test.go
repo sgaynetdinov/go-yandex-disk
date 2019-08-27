@@ -118,7 +118,7 @@ func TestResourceGot(t *testing.T) {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 
-	if req.URL.Path != "/v1/disk/resource" {
+	if req.URL.Path != "/v1/disk/resources" {
 		t.Error("Invalid url")
 	}
 }

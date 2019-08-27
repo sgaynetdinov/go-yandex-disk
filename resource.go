@@ -17,6 +17,6 @@ type Resource struct {
 func (client *Client) Stat(path string) (resource *Resource, err error) {
 	params := url.Values{}
 	params.Add("path", path)
-	err = client.get(&resource, "/v1/disk/resource", &params)
+	err = client.get(&resource, "/v1/disk/resources", &params)
 	return
 }
