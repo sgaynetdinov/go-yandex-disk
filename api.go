@@ -37,9 +37,8 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 	if err != nil {
 		panic(err)
 	}
-
+	defer response.Body.Close()
 	text, _ := ioutil.ReadAll(response.Body)
-	response.Body.Close()
 
 	statusCode := response.StatusCode
 	if (statusCode != http.StatusOK) && (statusCode != http.StatusCreated) {
