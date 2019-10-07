@@ -8,7 +8,7 @@ import (
 )
 
 type Client struct {
-	api_url     string
+	apiURL      string
 	header      *http.Header
 	http_client *http.Client
 }
@@ -20,7 +20,7 @@ func NewClient(token string) *Client {
 	header.Add("Content-Type", "application/json")
 
 	return &Client{
-		api_url:     "https://cloud-api.yandex.net:443",
+		apiURL:      "https://cloud-api.yandex.net:443",
 		header:      &header,
 		http_client: new(http.Client),
 	}
@@ -53,7 +53,7 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 func (client *Client) get(v interface{}, path string, params *url.Values) error {
 	var url string
 
-	url = client.api_url
+	url = client.apiURL
 
 	if path != "" {
 		url += path
@@ -74,7 +74,7 @@ func (client *Client) get(v interface{}, path string, params *url.Values) error 
 }
 
 func (client *Client) put(v interface{}, path string, params *url.Values) error {
-	url := client.api_url
+	url := client.apiURL
 
 	if path != "" {
 		url += path

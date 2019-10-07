@@ -21,7 +21,7 @@ func TestCreateFolder(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	err := client.CreateFolder("/Music/2pac")
 
 	if err != nil {
@@ -51,7 +51,7 @@ func TestCreateFolderAddStartSlash(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	client.CreateFolder("Music/2pac")
 
 	if req.URL.RawQuery != "path=%2FMusic%2F2pac" {
@@ -66,7 +66,7 @@ func TestCreateFolderError(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	err := client.CreateFolder("Music/2pac")
 
 	if err == nil {
@@ -86,7 +86,7 @@ func TestIsExistsFolder_1(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	isExists, err := client.IsExistsFolder("Music/2pac")
 
 	if err != nil {
@@ -105,7 +105,7 @@ func TestIsExistsFolder_2(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	isExists, err := client.IsExistsFolder("Music/2pac")
 
 	if err != nil {
@@ -129,7 +129,7 @@ func TestIsExistsFolder_3(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	isExists, err := client.IsExistsFolder("Music/2pac")
 
 	if err == nil {

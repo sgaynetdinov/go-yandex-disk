@@ -23,7 +23,7 @@ func TestGetUrlUpload(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	link, err := client.getUrlUpload("test.txt", false)
 
 	if err != nil {
@@ -61,7 +61,7 @@ func TestGetUrlUploadOverwrite(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	_, err := client.getUrlUpload("test.txt", true)
 
 	if err != nil {
@@ -84,7 +84,7 @@ func TestGetUrlUploadWithError(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 	link, err := client.getUrlUpload("/", false)
 
 	if err == nil {

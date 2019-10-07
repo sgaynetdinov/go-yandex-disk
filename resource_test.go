@@ -98,7 +98,7 @@ func TestResourceGot(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 
 	resource, err := client.Stat("/music/2pac/Changes.mp3")
 

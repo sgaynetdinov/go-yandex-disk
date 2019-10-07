@@ -44,7 +44,7 @@ func TestDiskInfo(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 
 	disk, err := client.DiskInfo()
 
@@ -76,7 +76,7 @@ func TestDiskInfoIfStatusNot200(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	client.api_url = ts.URL
+	client.apiURL = ts.URL
 
 	_, err := client.DiskInfo()
 
