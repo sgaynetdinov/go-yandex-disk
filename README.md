@@ -1,4 +1,5 @@
 [![GoDoc](https://godoc.org/github.com/sgaynetdinov/go-yandex-disk?status.svg)](https://godoc.org/github.com/sgaynetdinov/go-yandex-disk)
+[![Go Report Card](https://goreportcard.com/badge/github.com/sgaynetdinov/go-yandex-disk)](https://goreportcard.com/report/github.com/sgaynetdinov/go-yandex-disk)
 
 ## Install
 
