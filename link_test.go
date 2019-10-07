@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var link_json = []byte(`{
+var linkJSON = []byte(`{
   "href": "https://uploader1d.dst.yandex.net:443/upload-target/...",
   "method": "PUT",
   "templated": false
@@ -14,7 +14,7 @@ var link_json = []byte(`{
 func TestLink(t *testing.T) {
 	var link link
 
-	json.Unmarshal(link_json, &link)
+	json.Unmarshal(linkJSON, &link)
 
 	if link.Href != "https://uploader1d.dst.yandex.net:443/upload-target/..." {
 		t.Error("Invalid Href")
