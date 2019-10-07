@@ -22,8 +22,8 @@ func (client *Client) getUrlUpload(path string, overwrite bool) (link *link, err
 func (client *Client) uploadFile(urlUpload string, reader *bufio.Reader) (err error) {
 	req, _ := http.NewRequest(http.MethodPut, urlUpload, reader)
 
-	client_http := &http.Client{}
-	res, err := client_http.Do(req)
+	clientHTTP := &http.Client{}
+	res, err := clientHTTP.Do(req)
 	if err != nil {
 		panic(err)
 	}
