@@ -1,5 +1,7 @@
 [![GoDoc](https://godoc.org/github.com/sgaynetdinov/go-yandex-disk?status.svg)](https://godoc.org/github.com/sgaynetdinov/go-yandex-disk)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sgaynetdinov/go-yandex-disk)](https://goreportcard.com/report/github.com/sgaynetdinov/go-yandex-disk)
+[![Release](https://img.shields.io/github/release/sgaynetdinov/go-yandex-disk.svg?style=flat-square)](https://github.com/sgaynetdinov/go-yandex-disk/releases/latest)
+
 
 ## Install
 
