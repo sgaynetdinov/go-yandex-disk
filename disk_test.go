@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var disk_json = []byte(`{
+var diskJSON = []byte(`{
   "trash_size": 4631577437,
   "total_space": 319975063552,
   "used_space": 26157681270,
@@ -21,7 +21,7 @@ var disk_json = []byte(`{
 func TestDisk(t *testing.T) {
 	var disk Disk
 
-	json.Unmarshal(disk_json, &disk)
+	json.Unmarshal(diskJSON, &disk)
 
 	if disk.TrashSize != 4631577437 {
 		t.Error("Disk.TrashSize")
@@ -39,7 +39,7 @@ func TestDisk(t *testing.T) {
 func TestDiskInfo(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(disk_json)
+		w.Write(diskJSON)
 	}))
 	defer ts.Close()
 

@@ -31,7 +31,7 @@ func TestDo(t *testing.T) {
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(disk_json)
+		w.Write(diskJSON)
 		req = r
 	}))
 	defer ts.Close()
