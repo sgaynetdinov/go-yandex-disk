@@ -8,9 +8,9 @@ import (
 )
 
 type Client struct {
-	apiURL      string
-	header      *http.Header
-	http_client *http.Client
+	apiURL     string
+	header     *http.Header
+	httpClient *http.Client
 }
 
 func NewClient(token string) *Client {
@@ -20,9 +20,9 @@ func NewClient(token string) *Client {
 	header.Add("Content-Type", "application/json")
 
 	return &Client{
-		apiURL:      "https://cloud-api.yandex.net:443",
-		header:      &header,
-		http_client: new(http.Client),
+		apiURL:     "https://cloud-api.yandex.net:443",
+		header:     &header,
+		httpClient: new(http.Client),
 	}
 }
 
@@ -33,7 +33,7 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 		panic(err)
 	}
 
-	response, err := client.http_client.Do(request)
+	response, err := client.httpClient.Do(request)
 	if err != nil {
 		panic(err)
 	}
