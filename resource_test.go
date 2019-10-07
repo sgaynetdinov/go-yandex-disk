@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var resource_json = []byte(`{
+var resourceJSON = []byte(`{
   "type": "media",
   "path": "/music/2pac/Changes.mp3",
   "name": "Changes.mp3",
@@ -15,7 +15,7 @@ var resource_json = []byte(`{
   "modified": "1998-10-13T00:00:00+00:00"
 }`)
 
-var resource_optional_field_json = []byte(`{
+var resourceOptionalFieldJSON = []byte(`{
   "type": "media",
   "path": "/music/2pac/Changes.mp3",
   "name": "Changes.mp3",
@@ -27,7 +27,7 @@ var resource_optional_field_json = []byte(`{
 func TestResource(t *testing.T) {
 	var resource Resource
 
-	json.Unmarshal(resource_json, &resource)
+	json.Unmarshal(resourceJSON, &resource)
 
 	if resource.Type != "media" {
 		t.Error("Invalid Type")
@@ -61,7 +61,7 @@ func TestResource(t *testing.T) {
 func TestResourceOptionalField(t *testing.T) {
 	var resource Resource
 
-	json.Unmarshal(resource_optional_field_json, &resource)
+	json.Unmarshal(resourceOptionalFieldJSON, &resource)
 
 	if resource.Type != "media" {
 		t.Error("Invalid Type")
@@ -92,7 +92,7 @@ func TestResourceGot(t *testing.T) {
 	var req *http.Request
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(resource_optional_field_json)
+		w.Write(resourceOptionalFieldJSON)
 		req = r
 	}))
 	defer ts.Close()
