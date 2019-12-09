@@ -23,5 +23,5 @@ func main() {
 }
 ```
 
-## Documentation
-- API Yandex.Disk: https://yandex.ru/dev/disk/api/concepts/about-docpage/
+## Yandex.Disk API
+- https://yandex.ru/dev/disk/api/concepts/about-docpage/
