@@ -7,8 +7,11 @@
 
 `go get -u github.com/sgaynetdinov/go-yandex-disk`
 
+## Token
 
-## Step 0
+[https://yandex.ru/dev/disk/api/concepts/quickstart-docpage/](https://yandex.ru/dev/disk/api/concepts/quickstart-docpage/)
+
+## First Step
 
 ```
 import (
