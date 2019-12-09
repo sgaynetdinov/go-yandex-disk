@@ -1,7 +1,7 @@
 package yandexdisk
 
 import (
-	"bufio"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -19,7 +19,7 @@ func (client *Client) getUrlUpload(path string, overwrite bool) (link *link, err
 	return
 }
 
-func (client *Client) uploadFile(urlUpload string, reader *bufio.Reader) (err error) {
+func (client *Client) uploadFile(urlUpload string, reader io.Reader) (err error) {
 	req, _ := http.NewRequest(http.MethodPut, urlUpload, reader)
 
 	clientHTTP := &http.Client{}
@@ -32,7 +32,7 @@ func (client *Client) uploadFile(urlUpload string, reader *bufio.Reader) (err er
 	return
 }
 
-func (client *Client) UploadFile(path string, overwrite bool, reader *bufio.Reader) (err error) {
+func (client *Client) UploadFile(path string, overwrite bool, reader io.Reader) (err error) {
 	link, err := client.getUrlUpload(path, overwrite)
 	if err != nil {
 		return
