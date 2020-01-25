@@ -7,6 +7,11 @@
 
 `go get -u github.com/sgaynetdinov/go-yandex-disk`
 
+
+## Test
+
+`go test ./...`
+
 ## Token
 
 [https://yandex.ru/dev/disk/api/concepts/quickstart-docpage/](https://yandex.ru/dev/disk/api/concepts/quickstart-docpage/)
