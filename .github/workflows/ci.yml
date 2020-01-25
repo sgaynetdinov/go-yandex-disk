@@ -3,8 +3,16 @@ name: Golang
 on: push
 
 jobs:
-  test:
-    runs-on: cedrickring/golang-action@1.3.0
+  build:
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        go: [ '1.12.x', '1.13.x' ]
+    name: Go ${{ matrix.go }} sample
     steps:
+      - uses: actions/checkout@master
       - name: Test
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go }}
       - run: go build && go test ./... -v -failfast
