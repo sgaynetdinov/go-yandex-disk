@@ -1,0 +1,21 @@
+name: Golang
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        go: [ '1.12.x', '1.13.x' ]
+
+    name: Go ${{ matrix.go }} sample
+    steps:
+      - uses: actions/checkout@master
+      - name: Test
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go }}
+      - run: |
+          go version
+          go test ./... -v -failfast
