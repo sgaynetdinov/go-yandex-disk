@@ -77,3 +77,25 @@ func TestDoIfStatusCodeNot200(t *testing.T) {
 		t.Error("Invalid error message")
 	}
 }
+
+func TestDoIfStatusCodeNot200AddInvalidJSON(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{{
+  			"description": "resource already exists",
+  			"error": "PlatformResourceAlreadyExists"
+		}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient("YOUR_TOKEN")
+	_, err := client.do(http.MethodGet, ts.URL)
+
+	if err == nil {
+		t.Error("Error is nil")
+	}
+
+	if err.Error() != "invalid character '{' looking for beginning of object key string" {
+		t.Error()
+	}
+}
