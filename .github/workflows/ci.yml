@@ -11,11 +11,19 @@ jobs:
 
     name: Go ${{ matrix.go }} sample
     steps:
-      - uses: actions/checkout@master
-      - name: Test
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setup go
         uses: actions/setup-go@v1
         with:
           go-version: ${{ matrix.go }}
-      - run: |
-          go version
+
+      - name: golangci-lint
+        run: |
+          curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $GITHUB_WORKSPACE v1.23.7
+          $GITHUB_WORKSPACE/golangci-lint run --tests=false
+
+      - name: go test
+        run: |
           go test ./... -v -failfast
