@@ -21,13 +21,14 @@ func (client *Client) IsExistsFolder(name string) (bool, error) {
 	params := url.Values{}
 	params.Add("path", name)
 
-	err := client.get(nil, "/v1/disk/resources", &params)
+	var emptyResponse struct{}
+	err := client.get(&emptyResponse, "/v1/disk/resources", &params)
 
 	if err == nil {
 		return true, nil
 	}
 
-	if err.(*yaError).Err == "DiskNotFoundError" {
+	if err.Error() == "Resource not found. - DiskNotFoundError" {
 		return false, nil
 	}
 

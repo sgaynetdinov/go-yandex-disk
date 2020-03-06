@@ -40,11 +40,20 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 	defer response.Body.Close()
 	text, _ := ioutil.ReadAll(response.Body)
 
+	if !json.Valid(text) {
+		return nil, &yaError{
+			Err: "JSON invalid",
+		}
+	}
+
 	statusCode := response.StatusCode
 	if (statusCode != http.StatusOK) && (statusCode != http.StatusCreated) {
 		var errya yaError
-		if err := json.Unmarshal(text, &errya); err != nil {
-			return nil, err
+		if err = json.Unmarshal(text, &errya); err != nil {
+			return nil, &yaError{
+				Description: "json.Unmarshal",
+				Err:         err.Error(),
+			}
 		}
 		return nil, &errya
 	}
@@ -71,10 +80,9 @@ func (client *Client) get(v interface{}, path string, params *url.Values) error 
 		return err
 	}
 
-	if err := json.Unmarshal(*text, v); err != nil {
+	if err = json.Unmarshal(*text, v); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -95,7 +103,7 @@ func (client *Client) put(v interface{}, path string, params *url.Values) error 
 		return err
 	}
 
-	if err := json.Unmarshal(*text, v); err != nil {
+	if err = json.Unmarshal(*text, v); err != nil {
 		return err
 	}
 	return nil

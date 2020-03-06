@@ -101,6 +101,7 @@ func TestIsExistsFolder_1(t *testing.T) {
 func TestIsExistsFolder_2(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{}`))
 	}))
 	defer ts.Close()
 

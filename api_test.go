@@ -95,7 +95,8 @@ func TestDoIfStatusCodeNot200AddInvalidJSON(t *testing.T) {
 		t.Error("Error is nil")
 	}
 
-	if err.Error() != "invalid character '{' looking for beginning of object key string" {
+	if err.Error() != " - JSON invalid" {
 		t.Error()
 	}
+
 }
