@@ -114,7 +114,7 @@ func TestResourceGot(t *testing.T) {
 		t.Error("Invalid method http")
 	}
 
-	if req.URL.RawQuery != "path=%2Fmusic%2F2pac%2FChanges.mp3" {
+	if req.URL.RawQuery != "path=disk%3A%2Fmusic%2F2pac%2FChanges.mp3" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 

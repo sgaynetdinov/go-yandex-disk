@@ -2,7 +2,7 @@ package yandexdisk
 
 import (
 	"net/http"
-	"net/http/httptest"
+	"net/url"
 	"testing"
 )
 
@@ -27,17 +27,12 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestDo(t *testing.T) {
-	var req *http.Request
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(diskJSON)
-		req = r
-	}))
+	req, ts := makeServer(diskJSON, http.StatusOK)
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
-	_, err := client.do(http.MethodGet, ts.URL)
+	client.apiURL = ts.URL
+	_, err := client.do(http.MethodGet, "", &url.Values{})
 
 	if err != nil {
 		t.Error("Error is not nil")
@@ -56,47 +51,33 @@ func TestDo(t *testing.T) {
 	}
 }
 
-func TestDoIfStatusCodeNot200(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{
-  			"description": "resource already exists",
-  			"error": "PlatformResourceAlreadyExists"
-		}`))
-	}))
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	_, err := client.do(http.MethodGet, ts.URL)
-
-	if err == nil {
-		t.Error("Error is nil")
+func TestDoIfFail(t *testing.T) {
+	cases := []struct {
+		name         string
+		responseBody []byte
+		statusCode   int
+		expected     string
+	}{
+		{"Status code equal 500", []byte(`{"description": "resource already exists", "error": "PlatformResourceAlreadyExists"}`), http.StatusInternalServerError, "resource already exists - PlatformResourceAlreadyExists"},
+		{"Invalid JSON", []byte(`{{"description": "resource already exists", "error": "PlatformResourceAlreadyExists"}`), http.StatusInternalServerError, " - JSON invalid"},
 	}
 
-	if err.Error() != "resource already exists - PlatformResourceAlreadyExists" {
-		t.Error("Invalid error message")
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			_, ts := makeServer(tc.responseBody, tc.statusCode)
+			defer ts.Close()
+
+			client := NewClient("YOUR_TOKEN")
+			client.apiURL = ts.URL
+			_, err := client.do(http.MethodGet, "", &url.Values{})
+
+			if err == nil {
+				t.Error("Error is nil")
+			}
+
+			if err.Error() != tc.expected {
+				t.Error("Invalid error message")
+			}
+		})
 	}
-}
-
-func TestDoIfStatusCodeNot200AddInvalidJSON(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{{
-  			"description": "resource already exists",
-  			"error": "PlatformResourceAlreadyExists"
-		}`))
-	}))
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	_, err := client.do(http.MethodGet, ts.URL)
-
-	if err == nil {
-		t.Error("Error is nil")
-	}
-
-	if err.Error() != " - JSON invalid" {
-		t.Error()
-	}
-
 }

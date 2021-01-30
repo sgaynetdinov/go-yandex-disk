@@ -42,7 +42,7 @@ func TestGetUrlUpload(t *testing.T) {
 		t.Error("Invalid Templated")
 	}
 
-	if req.URL.RawQuery != "overwrite=false&path=test.txt" {
+	if req.URL.RawQuery != "overwrite=false&path=disk%3A%2Ftest.txt" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 
@@ -69,7 +69,7 @@ func TestGetUrlUploadOverwrite(t *testing.T) {
 		t.Error("Error is not nil")
 	}
 
-	if req.URL.RawQuery != "overwrite=true&path=test.txt" {
+	if req.URL.RawQuery != "overwrite=true&path=disk%3A%2Ftest.txt" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 }

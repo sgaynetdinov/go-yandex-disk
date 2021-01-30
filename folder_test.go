@@ -32,7 +32,7 @@ func TestCreateFolder(t *testing.T) {
 		t.Error("Invalid method")
 	}
 
-	if req.URL.RawQuery != "path=%2FMusic%2F2pac" {
+	if req.URL.RawQuery != "path=disk%3A%2FMusic%2F2pac" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 
@@ -54,7 +54,7 @@ func TestCreateFolderAddStartSlash(t *testing.T) {
 	client.apiURL = ts.URL
 	client.CreateFolder("Music/2pac")
 
-	if req.URL.RawQuery != "path=%2FMusic%2F2pac" {
+	if req.URL.RawQuery != "path=disk%3A%2FMusic%2F2pac" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 }
@@ -75,6 +75,7 @@ func TestCreateFolderError(t *testing.T) {
 }
 
 func TestIsExistsFolder_1(t *testing.T) {
+	var req *http.Request
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(`{
@@ -82,6 +83,7 @@ func TestIsExistsFolder_1(t *testing.T) {
 			"description": "Resource not found.",
 		    "error": "DiskNotFoundError"
 		}`))
+		req = r
 	}))
 	defer ts.Close()
 
@@ -96,12 +98,18 @@ func TestIsExistsFolder_1(t *testing.T) {
 	if isExists != false {
 		t.Error()
 	}
+
+	if req.URL.RawQuery != "path=disk%3A%2FMusic%2F2pac" {
+		t.Error("Invalid", req.URL.RawQuery)
+	}
 }
 
 func TestIsExistsFolder_2(t *testing.T) {
+	var req *http.Request
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{}`))
+		req = r
 	}))
 	defer ts.Close()
 
@@ -116,9 +124,14 @@ func TestIsExistsFolder_2(t *testing.T) {
 	if isExists != true {
 		t.Error()
 	}
+
+	if req.URL.RawQuery != "path=disk%3A%2FMusic%2F2pac" {
+		t.Error("Invalid", req.URL.RawQuery)
+	}
 }
 
 func TestIsExistsFolder_3(t *testing.T) {
+	var req *http.Request
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(`{
@@ -126,6 +139,7 @@ func TestIsExistsFolder_3(t *testing.T) {
 			"description": "",
 		    "error": "Disk"
 		}`))
+		req = r
 	}))
 	defer ts.Close()
 
@@ -139,5 +153,9 @@ func TestIsExistsFolder_3(t *testing.T) {
 
 	if isExists != false {
 		t.Error()
+	}
+
+	if req.URL.RawQuery != "path=disk%3A%2FMusic%2F2pac" {
+		t.Error("Invalid", req.URL.RawQuery)
 	}
 }
