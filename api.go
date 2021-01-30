@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type Client struct {
@@ -26,8 +27,27 @@ func NewClient(token string) *Client {
 	}
 }
 
-func (client *Client) do(method string, path string) (*[]byte, error) {
-	request, err := http.NewRequest(method, path, nil)
+func (client *Client) do(method string, path string, params *url.Values) (*[]byte, error) {
+	url := client.apiURL
+
+	if path != "" {
+		url += path
+	}
+
+	if params != nil && params.Get("path") != "" {
+		name := params.Get("path")
+		if !strings.HasPrefix(name, "/") {
+			name = "/" + name
+		}
+
+		params.Set("path", "disk:"+name)
+	}
+
+	if params != nil {
+		url += "?" + params.Encode()
+	}
+
+	request, err := http.NewRequest(method, url, nil)
 	request.Header = *client.header
 	if err != nil {
 		panic(err)
@@ -62,19 +82,7 @@ func (client *Client) do(method string, path string) (*[]byte, error) {
 }
 
 func (client *Client) get(v interface{}, path string, params *url.Values) error {
-	var url string
-
-	url = client.apiURL
-
-	if path != "" {
-		url += path
-	}
-
-	if params != nil {
-		url += "?" + params.Encode()
-	}
-
-	text, err := client.do(http.MethodGet, url)
+	text, err := client.do(http.MethodGet, path, params)
 
 	if err != nil {
 		return err
@@ -87,17 +95,7 @@ func (client *Client) get(v interface{}, path string, params *url.Values) error 
 }
 
 func (client *Client) put(v interface{}, path string, params *url.Values) error {
-	url := client.apiURL
-
-	if path != "" {
-		url += path
-	}
-
-	if params != nil {
-		url += "?" + params.Encode()
-	}
-
-	text, err := client.do(http.MethodPut, url)
+	text, err := client.do(http.MethodPut, path, params)
 
 	if err != nil {
 		return err

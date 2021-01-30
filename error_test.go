@@ -5,13 +5,14 @@ import (
 	"testing"
 )
 
-var error_json = []byte(`{
+func TestError(t *testing.T) {
+	var e yaError
+
+	error_json := []byte(`{
   "description": "resource already exists",
   "error": "PlatformResourceAlreadyExists"
 }`)
 
-func TestError(t *testing.T) {
-	var e yaError
 	json.Unmarshal(error_json, &e)
 
 	if e.Error() != "resource already exists - PlatformResourceAlreadyExists" {
