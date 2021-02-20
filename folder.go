@@ -4,17 +4,17 @@ import (
 	"net/url"
 )
 
-func (client *Client) CreateFolder(name string) error {
+func (client *Client) CreateFolder(path string) error {
 	params := url.Values{}
-	params.Add("path", name)
+	params.Add("path", path)
 
 	err := client.put(&link{}, "/v1/disk/resources", &params)
 	return err
 }
 
-func (client *Client) IsExistsFolder(name string) (bool, error) {
+func (client *Client) IsExistsFolder(path string) (bool, error) {
 	params := url.Values{}
-	params.Add("path", name)
+	params.Add("path", path)
 
 	var emptyResponse struct{}
 	err := client.get(&emptyResponse, "/v1/disk/resources", &params)
