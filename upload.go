@@ -25,7 +25,7 @@ func (client *Client) uploadFile(urlUpload string, reader io.Reader) (err error)
 	clientHTTP := &http.Client{}
 	res, err := clientHTTP.Do(req)
 	if err != nil {
-		panic(err)
+		return
 	}
 	defer res.Body.Close()
 

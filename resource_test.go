@@ -27,7 +27,9 @@ var resourceOptionalFieldJSON = []byte(`{
 func TestResource(t *testing.T) {
 	var resource Resource
 
-	json.Unmarshal(resourceJSON, &resource)
+	if err := json.Unmarshal(resourceJSON, &resource); err != nil {
+		t.Fatal("Unmarshal json")
+	}
 
 	if resource.Type != "media" {
 		t.Error("Invalid Type")

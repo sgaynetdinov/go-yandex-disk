@@ -50,12 +50,12 @@ func (client *Client) do(method string, path string, params *url.Values) (*[]byt
 	request, err := http.NewRequest(method, url, nil)
 	request.Header = *client.header
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	response, err := client.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer response.Body.Close()
 	text, _ := ioutil.ReadAll(response.Body)
