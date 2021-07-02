@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestCreateFolder(t *testing.T) {
+func TestMkdir(t *testing.T) {
 	var req *http.Request
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -15,14 +15,13 @@ func TestCreateFolder(t *testing.T) {
   			"href": "https://cloud-api.yandex.net/v1/disk/resources?path", 
   			"method": "GET",
   			"templated": false
-		}`))
-		req = r
+		}`)) req = r
 	}))
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
 	client.apiURL = ts.URL
-	err := client.CreateFolder("/Music/2pac")
+	err := client.Mkdir("/Music/2pac")
 
 	if err != nil {
 		t.Error("Error is not nil")
@@ -41,7 +40,7 @@ func TestCreateFolder(t *testing.T) {
 	}
 }
 
-func TestCreateFolderAddStartSlash(t *testing.T) {
+func TestMkdirAddStartSlash(t *testing.T) {
 	var req *http.Request
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -52,14 +51,14 @@ func TestCreateFolderAddStartSlash(t *testing.T) {
 
 	client := NewClient("YOUR_TOKEN")
 	client.apiURL = ts.URL
-	client.CreateFolder("Music/2pac")
+	client.Mkdir("Music/2pac")
 
 	if req.URL.RawQuery != "path=disk%3A%2FMusic%2F2pac" {
 		t.Error("Invalid", req.URL.RawQuery)
 	}
 }
 
-func TestCreateFolderError(t *testing.T) {
+func TestMkdirError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}))
@@ -67,7 +66,7 @@ func TestCreateFolderError(t *testing.T) {
 
 	client := NewClient("YOUR_TOKEN")
 	client.apiURL = ts.URL
-	err := client.CreateFolder("Music/2pac")
+	err := client.Mkdir("Music/2pac")
 
 	if err == nil {
 		t.Error()
