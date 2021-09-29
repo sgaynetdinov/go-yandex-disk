@@ -20,7 +20,10 @@ func (client *Client) getUrlUpload(path string, overwrite bool) (link *link, err
 }
 
 func (client *Client) uploadFile(urlUpload string, reader io.Reader) (err error) {
-	req, _ := http.NewRequest(http.MethodPut, urlUpload, reader)
+	req, err := http.NewRequest(http.MethodPut, urlUpload, reader)
+	if err != nil {
+		return
+	}
 
 	clientHTTP := &http.Client{}
 	res, err := clientHTTP.Do(req)
