@@ -1,5 +1,9 @@
 package yandexdisk
 
+import "errors"
+
+var ErrResourceNotFound = errors.New("Resource not found. - DiskNotFoundError")
+
 type yaError struct {
 	Description string `json:"description"`
 	Err         string `json:"error"`

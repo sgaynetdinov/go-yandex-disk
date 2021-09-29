@@ -91,7 +91,7 @@ func TestIsExistsFolder_1(t *testing.T) {
 	isExists, err := client.IsExistsFolder("Music/2pac")
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 	}
 
 	if isExists != false {

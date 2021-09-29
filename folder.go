@@ -63,7 +63,7 @@ func (client *Client) IsExistsFolder(path string) (bool, error) {
 		return true, nil
 	}
 
-	if err.Error() == "Resource not found. - DiskNotFoundError" {
+	if err.Error() == ErrResourceNotFound.Error() {
 		return false, nil
 	}
 
