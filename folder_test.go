@@ -15,7 +15,8 @@ func TestMkdir(t *testing.T) {
   			"href": "https://cloud-api.yandex.net/v1/disk/resources?path", 
   			"method": "GET",
   			"templated": false
-		}`)) req = r
+		}`))
+		req = r
 	}))
 	defer ts.Close()
 

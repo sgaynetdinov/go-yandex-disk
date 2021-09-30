@@ -8,7 +8,6 @@ import (
 
 const PATH_SEPARATOR = string(filepath.Separator)
 
-
 func (client *Client) Mkdir(path string) error {
 	params := url.Values{}
 	params.Add("path", path)
@@ -17,9 +16,8 @@ func (client *Client) Mkdir(path string) error {
 	return err
 }
 
-
-func pathList (fullpath string) (pathItems []string) {
-	var accPath string;
+func pathList(fullpath string) (pathItems []string) {
+	var accPath string
 	folderItems := strings.Split(fullpath, PATH_SEPARATOR)
 	for _, folder := range folderItems {
 		if folder == "" {
