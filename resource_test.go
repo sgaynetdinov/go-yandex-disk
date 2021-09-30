@@ -21,7 +21,8 @@ var resourceOptionalFieldJSON = []byte(`{
   "name": "Changes.mp3",
   "created": "1998-10-13T00:00:00+00:00",
   "modified": "1998-10-13T00:00:00+00:00",
-  "md5": "100500"
+  "md5": "100500",
+  "size": 100500100
 }`)
 
 func TestResource(t *testing.T) {
@@ -58,6 +59,10 @@ func TestResource(t *testing.T) {
 	if resource.Sha256 != "" {
 		t.Error("Invalid Sha256")
 	}
+
+	if resource.Size != 0 {
+		t.Error("Invalid Size")
+	}
 }
 
 func TestResourceOptionalField(t *testing.T) {
@@ -87,6 +92,10 @@ func TestResourceOptionalField(t *testing.T) {
 
 	if resource.Md5 != "100500" {
 		t.Error("Invalid Md5")
+	}
+
+	if resource.Size != 100500100 {
+		t.Error("Invalid Size")
 	}
 }
 
