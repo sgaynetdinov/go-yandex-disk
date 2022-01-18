@@ -34,8 +34,9 @@ func (client *Client) do(method string, path string, params *url.Values) (*[]byt
 		url += path
 	}
 
-	if params != nil && params.Get("path") != "" {
+    if params != nil && params.Get("path") != "" && !strings.HasPrefix(params.Get("path"), "disk:") {
 		name := params.Get("path")
+
 		if !strings.HasPrefix(name, "/") {
 			name = "/" + name
 		}
