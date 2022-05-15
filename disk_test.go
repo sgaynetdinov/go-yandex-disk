@@ -17,16 +17,11 @@ var diskJSON = []byte(`{
 }`)
 
 func TestDiskInfo(t *testing.T) {
-	req, ts := makeServer(diskJSON, http.StatusOK)
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
-
+	req, client := makeServer(diskJSON, http.StatusOK)
 	disk, err := client.DiskInfo()
 
 	if err != nil {
-		t.Error("Error is not nil")
+		t.Error("Error is not nil", err)
 	}
 
 	if req.URL.Path != "/v1/disk" {
@@ -51,14 +46,10 @@ func TestDiskInfo(t *testing.T) {
 }
 
 func TestDiskInfoIfStatusNot200(t *testing.T) {
-	req, ts := makeServer(
+	req, client := makeServer(
 		[]byte(`{"description": "resource already exists", "error": "PlatformResourceAlreadyExists"}`),
 		http.StatusInternalServerError,
 	)
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
 
 	got, err := client.DiskInfo()
 

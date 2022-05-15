@@ -99,12 +99,7 @@ func TestResourceOptionalField(t *testing.T) {
 }
 
 func TestResourceGot(t *testing.T) {
-	req, ts := makeServer(resourceOptionalFieldJSON, http.StatusOK)
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
-
+	req, client := makeServer(resourceOptionalFieldJSON, http.StatusOK)
 	resource, err := client.Stat("/music/2pac/Changes.mp3")
 
 	if err != nil {
@@ -124,6 +119,6 @@ func TestResourceGot(t *testing.T) {
 	}
 
 	if req.URL.Path != "/v1/disk/resources" {
-		t.Error("Invalid url")
+		t.Error("Invalid url", req.URL.Path)
 	}
 }

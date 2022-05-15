@@ -8,11 +8,7 @@ import (
 )
 
 func TestGetUrlUpload(t *testing.T) {
-	req, ts := makeServer([]byte(`{"href": "https://uploader1d.dst.yandex.net:443/upload-target/...", "method": "GET", "templated": false}`), http.StatusOK)
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
+	req, client := makeServer([]byte(`{"href": "https://uploader1d.dst.yandex.net:443/upload-target/...", "method": "GET", "templated": false}`), http.StatusOK)
 	link, err := client.getUrlUpload("test.txt", false)
 
 	if err != nil {
@@ -41,11 +37,7 @@ func TestGetUrlUpload(t *testing.T) {
 }
 
 func TestGetUrlUploadOverwrite(t *testing.T) {
-	req, ts := makeServer([]byte(`{}`), http.StatusOK)
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
+	req, client := makeServer([]byte(`{}`), http.StatusOK)
 	_, err := client.getUrlUpload("test.txt", true)
 
 	if err != nil {
@@ -58,11 +50,7 @@ func TestGetUrlUploadOverwrite(t *testing.T) {
 }
 
 func TestGetUrlUploadWithError(t *testing.T) {
-	_, ts := makeServer([]byte(`{"description": "resource already exists", "error": "PlatformResourceAlreadyExists"}`), http.StatusRequestEntityTooLarge)
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
+	_, client := makeServer([]byte(`{"description": "resource already exists", "error": "PlatformResourceAlreadyExists"}`), http.StatusRequestEntityTooLarge)
 	link, err := client.getUrlUpload("/", false)
 
 	if err == nil {
@@ -75,12 +63,9 @@ func TestGetUrlUploadWithError(t *testing.T) {
 }
 
 func TestUploadRequest(t *testing.T) {
-	req, ts := makeServer([]byte(``), http.StatusCreated)
-	defer ts.Close()
-	client := NewClient("YOUR_TOKEN")
-
+	req, client := makeServer([]byte(``), http.StatusCreated)
 	file, _ := os.Open("testdata/upload_file.txt")
-	err := client.uploadFile(ts.URL, bufio.NewReader(file))
+	err := client.uploadFile(client.apiURL, bufio.NewReader(file))
 
 	if err != nil {
 		t.Error("Invalid not nil")

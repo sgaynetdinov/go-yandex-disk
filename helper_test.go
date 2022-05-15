@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 )
 
-func makeServer(body []byte, status int) (*http.Request, *httptest.Server) {
+func makeServer(body []byte, status int) (*http.Request, *Client) {
 	var req http.Request
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +16,10 @@ func makeServer(body []byte, status int) (*http.Request, *httptest.Server) {
 
 	ts := httptest.NewUnstartedServer(http.HandlerFunc(handler))
 	ts.Start()
-	ts.URL += "/v1"
+	ts.URL = JoinURL(ts.URL, VERSION_API)
 
-	return &req, ts
+	client := NewClient("YOUR_TOKEN")
+	client.apiURL = ts.URL
+
+	return &req, client
 }
