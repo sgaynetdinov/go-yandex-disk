@@ -99,6 +99,13 @@ func (client *Client) do(method string, path string, params *url.Values) (*[]byt
 	return &text, nil
 }
 
+func (client *Client) afterDo(v interface{}, text *[]byte) error {
+	if err := json.Unmarshal(*text, v); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (client *Client) get(v interface{}, path string, params *url.Values) error {
 	text, err := client.do(http.MethodGet, path, params)
 
@@ -106,10 +113,7 @@ func (client *Client) get(v interface{}, path string, params *url.Values) error 
 		return err
 	}
 
-	if err = json.Unmarshal(*text, v); err != nil {
-		return err
-	}
-	return nil
+	return client.afterDo(v, text)
 }
 
 func (client *Client) put(v interface{}, path string, params *url.Values) error {
@@ -119,8 +123,5 @@ func (client *Client) put(v interface{}, path string, params *url.Values) error 
 		return err
 	}
 
-	if err = json.Unmarshal(*text, v); err != nil {
-		return err
-	}
-	return nil
+	return client.afterDo(v, text)
 }
