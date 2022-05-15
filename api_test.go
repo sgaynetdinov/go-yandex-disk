@@ -9,8 +9,8 @@ import (
 func TestNewClient(t *testing.T) {
 	client := NewClient("YOUR_TOKEN")
 
-	if client.apiURL != "https://cloud-api.yandex.net:443" {
-		t.Error("Invalid api url")
+	if client.apiURL != "https://cloud-api.yandex.net:443/v1" {
+		t.Error("Invalid api url", client.apiURL)
 	}
 
 	if client.header.Get("Authorization") != "OAuth YOUR_TOKEN" {
@@ -27,15 +27,12 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestDo(t *testing.T) {
-	req, ts := makeServer(diskJSON, http.StatusOK)
-	defer ts.Close()
+	req, client := makeServer(diskJSON, http.StatusOK)
 
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
 	_, err := client.do(http.MethodGet, "", &url.Values{})
 
 	if err != nil {
-		t.Error("Error is not nil")
+		t.Error("Error is not nil", err)
 	}
 
 	if req.Header.Get("Authorization") != "OAuth YOUR_TOKEN" {
@@ -64,11 +61,7 @@ func TestDoIfFail(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, ts := makeServer(tc.responseBody, tc.statusCode)
-			defer ts.Close()
-
-			client := NewClient("YOUR_TOKEN")
-			client.apiURL = ts.URL
+			_, client := makeServer(tc.responseBody, tc.statusCode)
 			_, err := client.do(http.MethodGet, "", &url.Values{})
 
 			if err == nil {

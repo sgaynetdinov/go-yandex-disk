@@ -3,7 +3,6 @@ package yandexdisk
 import (
 	"encoding/json"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
@@ -100,17 +99,7 @@ func TestResourceOptionalField(t *testing.T) {
 }
 
 func TestResourceGot(t *testing.T) {
-	var req *http.Request
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(resourceOptionalFieldJSON)
-		req = r
-	}))
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
-
+	req, client := makeServer(resourceOptionalFieldJSON, http.StatusOK)
 	resource, err := client.Stat("/music/2pac/Changes.mp3")
 
 	if err != nil {
@@ -130,6 +119,6 @@ func TestResourceGot(t *testing.T) {
 	}
 
 	if req.URL.Path != "/v1/disk/resources" {
-		t.Error("Invalid url")
+		t.Error("Invalid url", req.URL.Path)
 	}
 }

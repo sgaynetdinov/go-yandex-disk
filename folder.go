@@ -12,7 +12,7 @@ func (client *Client) Mkdir(path string) error {
 	params := url.Values{}
 	params.Add("path", path)
 
-	err := client.put(&link{}, "/v1/disk/resources", &params)
+	err := client.put(&link{}, "disk/resources", &params)
 	return err
 }
 
@@ -55,7 +55,7 @@ func (client *Client) IsExistsFolder(path string) (bool, error) {
 	params.Add("path", path)
 
 	var emptyResponse struct{}
-	err := client.get(&emptyResponse, "/v1/disk/resources", &params)
+	err := client.get(&emptyResponse, "disk/resources", &params)
 
 	if err == nil {
 		return true, nil

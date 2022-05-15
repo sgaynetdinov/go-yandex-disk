@@ -7,25 +7,11 @@ import (
 )
 
 func TestMkdir(t *testing.T) {
-	var req *http.Request
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(`{
-  			"href": "https://cloud-api.yandex.net/v1/disk/resources?path", 
-  			"method": "GET",
-  			"templated": false
-		}`))
-		req = r
-	}))
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
+	req, client := makeServer([]byte(`{"href": "https://cloud-api.yandex.net/v1/disk/resources?path", "method": "GET", "templated": false}`), http.StatusCreated)
 	err := client.Mkdir("/Music/2pac")
 
 	if err != nil {
-		t.Error("Error is not nil")
+		t.Error("Error is not nil", err)
 	}
 
 	if req.Method != http.MethodPut {
@@ -75,20 +61,7 @@ func TestMkdirError(t *testing.T) {
 }
 
 func TestIsExistsFolder_1(t *testing.T) {
-	var req *http.Request
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{
-	        "message": "Не удалось найти запрошенный ресурс.",
-			"description": "Resource not found.",
-		    "error": "DiskNotFoundError"
-		}`))
-		req = r
-	}))
-	defer ts.Close()
-
-	client := NewClient("YOUR_TOKEN")
-	client.apiURL = ts.URL
+	req, client := makeServer([]byte(`{"message": "Не удалось найти запрошенный ресурс.", "description": "Resource not found.", "error": "DiskNotFoundError"}`), http.StatusBadRequest)
 	isExists, err := client.IsExistsFolder("Music/2pac")
 
 	if err != nil {
