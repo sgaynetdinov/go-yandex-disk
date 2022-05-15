@@ -3,23 +3,12 @@ package yandexdisk
 import (
 	"bufio"
 	"net/http"
-	"net/http/httptest"
 	"os"
 	"testing"
 )
 
 func TestGetUrlUpload(t *testing.T) {
-	var req *http.Request
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{
-  			"href": "https://uploader1d.dst.yandex.net:443/upload-target/...",
-  			"method": "GET",
-  			"templated": false
-		}`))
-		req = r
-	}))
+	req, ts := makeServer([]byte(`{"href": "https://uploader1d.dst.yandex.net:443/upload-target/...", "method": "GET", "templated": false}`), http.StatusOK)
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
@@ -52,13 +41,7 @@ func TestGetUrlUpload(t *testing.T) {
 }
 
 func TestGetUrlUploadOverwrite(t *testing.T) {
-	var req *http.Request
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{}`))
-		req = r
-	}))
+	req, ts := makeServer([]byte(`{}`), http.StatusOK)
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
@@ -75,13 +58,7 @@ func TestGetUrlUploadOverwrite(t *testing.T) {
 }
 
 func TestGetUrlUploadWithError(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusRequestEntityTooLarge)
-		w.Write([]byte(`{
-			"description": "resource already exists",
-			"error": "PlatformResourceAlreadyExists"
-		}`))
-	}))
+	_, ts := makeServer([]byte(`{"description": "resource already exists", "error": "PlatformResourceAlreadyExists"}`), http.StatusRequestEntityTooLarge)
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
@@ -98,12 +75,7 @@ func TestGetUrlUploadWithError(t *testing.T) {
 }
 
 func TestUploadRequest(t *testing.T) {
-	var req *http.Request
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusCreated)
-		req = r
-	}))
+	req, ts := makeServer([]byte(``), http.StatusCreated)
 	defer ts.Close()
 	client := NewClient("YOUR_TOKEN")
 

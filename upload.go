@@ -15,7 +15,7 @@ func (client *Client) getUrlUpload(path string, overwrite bool) (link *link, err
 		params.Add("overwrite", "false")
 	}
 
-	err = client.get(&link, "/v1/disk/resources/upload", &params)
+	err = client.get(&link, "disk/resources/upload", &params)
 	return
 }
 

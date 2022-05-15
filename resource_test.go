@@ -3,7 +3,6 @@ package yandexdisk
 import (
 	"encoding/json"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
@@ -100,12 +99,7 @@ func TestResourceOptionalField(t *testing.T) {
 }
 
 func TestResourceGot(t *testing.T) {
-	var req *http.Request
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(resourceOptionalFieldJSON)
-		req = r
-	}))
+	req, ts := makeServer(resourceOptionalFieldJSON, http.StatusOK)
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")

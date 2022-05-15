@@ -5,8 +5,21 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"strings"
 )
+
+const API_URL = "https://cloud-api.yandex.net:443"
+const VERSION_API = "v1"
+
+func JoinURL(apiURL string, paths ...string) string {
+	u, _ := url.Parse(apiURL)
+
+	for _, path := range paths {
+		u.Path = filepath.Join(u.Path, path)
+	}
+	return u.String()
+}
 
 type Client struct {
 	apiURL     string
@@ -21,17 +34,17 @@ func NewClient(token string) *Client {
 	header.Add("Content-Type", "application/json")
 
 	return &Client{
-		apiURL:     "https://cloud-api.yandex.net:443",
+		apiURL:     JoinURL(API_URL, VERSION_API),
 		header:     &header,
 		httpClient: new(http.Client),
 	}
 }
 
 func (client *Client) do(method string, path string, params *url.Values) (*[]byte, error) {
-	url := client.apiURL
+	apiURL := client.apiURL
 
 	if path != "" {
-		url += path
+		apiURL = JoinURL(apiURL, path)
 	}
 
     if params != nil && params.Get("path") != "" && !strings.HasPrefix(params.Get("path"), "disk:") {
@@ -44,11 +57,15 @@ func (client *Client) do(method string, path string, params *url.Values) (*[]byt
 		params.Set("path", "disk:"+name)
 	}
 
-	if params != nil {
-		url += "?" + params.Encode()
+	if params != nil {	
+		apiURL += "?" + params.Encode()
 	}
 
-	request, err := http.NewRequest(method, url, nil)
+	request, err := http.NewRequest(method, apiURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
 	request.Header = *client.header
 	if err != nil {
 		return nil, err

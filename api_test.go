@@ -9,8 +9,8 @@ import (
 func TestNewClient(t *testing.T) {
 	client := NewClient("YOUR_TOKEN")
 
-	if client.apiURL != "https://cloud-api.yandex.net:443" {
-		t.Error("Invalid api url")
+	if client.apiURL != "https://cloud-api.yandex.net:443/v1" {
+		t.Error("Invalid api url", client.apiURL)
 	}
 
 	if client.header.Get("Authorization") != "OAuth YOUR_TOKEN" {

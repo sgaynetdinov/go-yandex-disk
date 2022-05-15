@@ -2,7 +2,6 @@ package yandexdisk
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
@@ -18,12 +17,7 @@ var diskJSON = []byte(`{
 }`)
 
 func TestDiskInfo(t *testing.T) {
-	var req *http.Request
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(diskJSON)
-		req = r
-	}))
+	req, ts := makeServer(diskJSON, http.StatusOK)
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")
@@ -57,15 +51,10 @@ func TestDiskInfo(t *testing.T) {
 }
 
 func TestDiskInfoIfStatusNot200(t *testing.T) {
-	var req *http.Request
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{
-  			"description": "resource already exists",
-  			"error": "PlatformResourceAlreadyExists"
-		}`))
-		req = r
-	}))
+	req, ts := makeServer(
+		[]byte(`{"description": "resource already exists", "error": "PlatformResourceAlreadyExists"}`),
+		http.StatusInternalServerError,
+	)
 	defer ts.Close()
 
 	client := NewClient("YOUR_TOKEN")

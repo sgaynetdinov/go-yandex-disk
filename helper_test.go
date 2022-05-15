@@ -14,7 +14,9 @@ func makeServer(body []byte, status int) (*http.Request, *httptest.Server) {
 		req = *r
 	}
 
-	ts := httptest.NewServer(http.HandlerFunc(handler))
+	ts := httptest.NewUnstartedServer(http.HandlerFunc(handler))
+	ts.Start()
+	ts.URL += "/v1"
 
 	return &req, ts
 }
